@@ -1,0 +1,107 @@
+#!/bin/bash
+# Limpeza de debs e build
+#
+# $1 = Arquivo a fazer o build (Exemplo: pacote.tar.bz2)
+# $2 = Sessão do pacote        (Exemplo: misc)
+# $3 = Prioridade              (Exemplo: Standard)
+# $4 = Página do projeto       (Exemplo: http://seusite.com)
+
+printf "pasta para build (exemplo: ../pkg): "
+read build_directory
+if [ ! -e $1 ]; then
+   echo "\
+
+   O arquivo informado não existe!
+   "
+   exit
+fi
+
+# Chega se o arquivo é uma pasta
+if [ ! -d $1 ]; then
+   echo "\
+
+   Isso não é uma pasta! estás louco?
+   "
+   exit
+fi
+
+printf "Criar orig? [s/N]:
+read orig
+
+printf "Nome do Pacote: "
+read pkg_name
+
+printf "Versão do Pacote: "
+read pkg_versao
+
+printf "Versão da build: "
+read pkg_vbuild
+
+# Limpeza de pacotes gerados
+if [ "${orig}" == "s" -o "${orig}" == "S" ]; then 
+    rm ../*orig.tar.bz2 >/dev/null 2>&1
+    rm ../*orig.tar.gz >/dev/null 2>&1
+fi
+
+# Limpeza de info arquivos
+rm ../*.build ../*.changes ../*.upload ../*.dsc ../*.diff.gz >/dev/null 2>&1
+
+# Criação de arquivo orig
+if [ "${orig}" == "s" -o "${orig}" == "S" ]; then
+    dpkg-source -b ../${build_directory}
+    mv ${pkg_name}_${pkg_versao}-${pkg_build}.tar.gz ../${pkg_name}_${pkg_versao}.orig.tar.gz
+fi
+
+# Prepara pasta do build
+if [ "${orig}" == "s" -o "${orig}" == "S" ]; then
+    dh_make --copyright gpl --single --packagename ${pkg_name}_${pkg_versao} --createorig
+else
+    dh_make
+fi
+
+# Apaga arquivos desnecessários
+cd debian/
+rm *.ex *.EX README.Debian >/dev/null 2>&1
+
+# Edita arquivo <changelog>
+mv changelog changelog.bkp
+pacote=`aqm=${1#.tar.*};printf "${aqm%-*}"`
+versao=`aqm=${1%.tar.*};printf "${aqm#*-}"`
+dist=`cat /etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{ print $2 }'`
+
+echo "$pacote (${versao}-1oneiric1) ${dist}; urgency=low
+
+  * Initial release 
+
+ -- Lara Maia <lara@craft.net.br>  `date -R`
+" >> changelog
+
+# Edita arquivo <control>
+mv control control.bkp
+
+echo "Source: ${pacote}
+Section: universe/$2
+Priority: $3
+Maintainer: Lara Maia <lara@craft.net.br>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: $versao
+Homepage: $4
+
+Package: $pacote
+Architecture: any
+Depends: \${shlibs:Depends}, \${misc:Depends}
+Description: $pacote $versao
+ Dúvidas, envie um email para: lara@craft.net.br
+" >> control
+
+# Se tudo correu bem, deleta os bkps
+rm *.bkp
+
+# Cria pacotes e valida chaves
+cd ../
+debuild -S
+
+# Envia para o launchpad
+cd ../
+dput ppa:mrk3004/pessoal-debs ${pacote}_${versao}-1oneiric1_source.changes
+echo Ok
