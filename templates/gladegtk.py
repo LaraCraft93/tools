@@ -30,7 +30,7 @@ import os, sys
 
 ### CONFIG ###
 verbose=True
-maintainer_mode=False
+maintainer_mode=True
 verbose_dump=False
 sys.argv.pop(0)
 ##############
@@ -80,17 +80,18 @@ if __name__ == "__main__":
 	
 	
 	if maintainer_mode == True:
-		msg='\nATENÇÂO! Você está entrando no modo Maintainer, \
-Esse é um modo especial criado para encontrar e corrigir \
-bugs que possam vir a ocorrer. Você pode DANIFICAR SERIAMENTE \
-seus arquivos se não souber o que está fazendo. \
-Não me responsabilizo por nada neste modo de execução. \
-Se entrou nesse modo por engano, clique em cancelar e \
-execute o programa pela forma convencional.'
-		dialog=gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, msg)
+		title='\nATENÇÂO! Você está entrando no modo Maintainer!'
+		msg='Esse é um modo especial criado para encontrar e corrigir \
+bugs\nque possam vir a ocorrer. Você pode DANIFICAR SERIAMENTE\n\
+seus arquivos se não souber o que está fazendo.\
+\n\nNão me responsabilizo por nada neste modo de execução.\
+\nSe entrou nesse modo por engano, clique em cancelar e \
+execute\no programa pela forma convencional.'
+		dialog=Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, title)
+		dialog.format_secondary_text(msg)
 		confirma = dialog.run()
 		dialog.destroy()
-		if confirma == gtk.RESPONSE_CANCEL:
+		if confirma == Gtk.ResponseType.CANCEL:
 			exit()
 	
 	if verbose == True:
