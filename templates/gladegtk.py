@@ -28,6 +28,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GLib, Gtk, Gdk, GdkPixbuf, Pango
+from threading import Thread
+from time import sleep
 import os, sys
 
 ### CONFIG ###
@@ -37,8 +39,23 @@ verbose_dump=False
 sys.argv.pop(0)
 ##############
 
+class SubProcesso(Thread):
+	def __init__(self):
+		self.parar = False
+
+	def start(self):
+		while not self._stop:
+			print 'Thread: Estou funcionando''
+			sleep(1)
+
+	def stop(self):
+		self.parar = True
+
 class JanelaPrincipal:
 	def __init__(self):
+		self.subprocesso = SubProcesso()
+		self.subprocesso.start()
+		
 		builder = Gtk.Builder()
 		#builder.add_from_string('pui')
 		builder.add_from_file('principal.xml')
@@ -58,6 +75,9 @@ class JanelaPrincipal:
 		self.janela.show()
 	
 	def on_window_destroy(self, widget):
+		self.subprocesso.stop()
+		while self.worker.isAlive():
+			pass
 		Gtk.main_quit()
 
 if __name__ == "__main__":
