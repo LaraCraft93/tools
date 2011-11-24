@@ -149,15 +149,15 @@ def ram_display():
 # Screenshot Function.
 screen = '%s' % options.screenshot
 def screenshot():
- print 'Taking shot in',
- list = range(1,6)
- list.reverse()
- for x in list:
-   print '%s..' % x,
-   sys.stdout.flush()
-   sleep(1)
- print 'Say Cheeze!'
- subprocess.check_call(['scrot'])
+	print 'Tirando um print em',
+	list = range(1,6)
+	list.reverse()
+	for x in list:
+		print '%s..' % x,
+		sys.stdout.flush()
+		sleep(1)
+	print 'Diga Xis!'
+	subprocess.check_call(['scrot'])
 
 # Operating System Function.
 def distro_display(): 
@@ -186,13 +186,13 @@ def kernel_display():
  output ('Kernel', kernel)
 
 def user_display():
- username= os.getenv('USER')
- output ('User', username)
+	username= os.getenv('USER')
+	output ('Usuário', username)
 
 # Hostname Function.
 def hostname_display():
- hostname = Popen(['uname', '-n'], stdout=PIPE).communicate()[0].rstrip('\n')
- output('Hostname', hostname)
+	hostname = Popen(['uname', '-n'], stdout=PIPE).communicate()[0].rstrip('\n')
+	output('Servidor', hostname)
 
 # CPU Function.
 def cpu_display():
@@ -202,19 +202,19 @@ def cpu_display():
 
 # Uptime Function.
 def uptime_display():
- fuptime = int(open('/proc/uptime').read().split('.')[0])
- day = int(fuptime / 86400)
- fuptime = fuptime % 86400
- hour = int(fuptime / 3600)
- fuptime = fuptime % 3600
- minute = int(fuptime / 60)
- uptime = ''
- if day == 1:
-  uptime += '%d day, ' % day
- if day > 1:
-  uptime += '%d days, ' % day
- uptime += '%d:%02d' % (hour, minute)
- output('Uptime', uptime)
+	fuptime = int(open('/proc/uptime').read().split('.')[0])
+	day = int(fuptime / 86400)
+	fuptime = fuptime % 86400
+	hour = int(fuptime / 3600)
+	fuptime = fuptime % 3600
+	minute = int(fuptime / 60)
+	uptime = ''
+	if day == 1:
+		uptime += '%d day, ' % day
+	if day > 1:
+		uptime += '%d days, ' % day
+	uptime += '%d:%02d' % (hour, minute)
+	output('Tempo Ligado', uptime)
 
 # Desktop Environment Function.
 def de_display():
@@ -225,10 +225,10 @@ def de_display():
 
 # Window Manager Function.
 def wm_display():
- for key in wm_dict.keys():
-  if key in processes:
-   wm = wm_dict[key]
-   output ('Window Manager', wm)
+	for key in wm_dict.keys():
+		if key in processes:
+			wm = wm_dict[key]
+			output ('Gerenciador de Janelas', wm)
 
 # Shell Function.
 def sh_display():
@@ -242,39 +242,39 @@ def term_display():
 
 # Packages Function.
 def packages_display():
- if DetectDistro == 'Ubuntu':
-  p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
-  p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
-  p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
-  packages = p3.communicate()[0].rstrip('\n')
-  output ('Packages', packages)
- if DetectDistro == 'Arch':
-  p1 = Popen(['pacman', '-Q'], stdout=PIPE)
-  p2 = Popen(['wc', '-l'], stdin=p1.stdout, stdout=PIPE)
-  packages = p2.communicate()[0].rstrip('\n')
-  output ('Packages', packages)
- if DetectDistro == 'Debian':
-  p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
-  p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
-  p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
-  packages = p3.communicate()[0].rstrip('\n')
-  output ('Packages', packages)
- if DetectDistro == 'CrunchBang':
-  p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
-  p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
-  p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
-  packages = p3.communicate()[0].rstrip('\n')
-  output ('Packages', packages)
- if DetectDistro == 'Fedora':
-  p1 = Popen(['rpm', '-qa'], stdout=PIPE)
-  p2 = Popen(['wc', '-l'], stdin=p1.stdout, stdout=PIPE)
-  packages = p2.communicate()[0].rstrip('\n')
- if DetectDistro == 'LinuxMint':
-  p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
-  p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
-  p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
-  packages = p3.communicate()[0].rstrip('\n')
-  output ('Packages', packages)
+	if DetectDistro == 'Ubuntu':
+		p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
+		p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
+		p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
+		packages = p3.communicate()[0].rstrip('\n')
+		output ('Pacotes', packages)
+	if DetectDistro == 'Arch':
+		p1 = Popen(['pacman', '-Q'], stdout=PIPE)
+		p2 = Popen(['wc', '-l'], stdin=p1.stdout, stdout=PIPE)
+		packages = p2.communicate()[0].rstrip('\n')
+		output ('Pacotes', packages)
+	if DetectDistro == 'Debian':
+		p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
+		p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
+		p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
+		packages = p3.communicate()[0].rstrip('\n')
+		output ('Pacotes', packages)
+	if DetectDistro == 'CrunchBang':
+		p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
+		p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
+		p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
+		packages = p3.communicate()[0].rstrip('\n')
+		output ('Pacotes', packages)
+	if DetectDistro == 'Fedora':
+		p1 = Popen(['rpm', '-qa'], stdout=PIPE)
+		p2 = Popen(['wc', '-l'], stdin=p1.stdout, stdout=PIPE)
+		packages = p2.communicate()[0].rstrip('\n')
+	if DetectDistro == 'LinuxMint':
+		p1 = Popen(['dpkg', '--get-selections'], stdout=PIPE)
+		p2 = Popen(['grep', '-v', 'deinstall'], stdin=p1.stdout, stdout=PIPE)
+		p3 = Popen(['wc', '-l'], stdin=p2.stdout, stdout=PIPE)
+		packages = p3.communicate()[0].rstrip('\n')
+		output ('Pacotes', packages)
 
 # Disk Function.
 def disk_display():
@@ -286,13 +286,13 @@ def disk_display():
  
 	if usedpercent <= 33:
 		fs = '%s%s %s/ %s' % (greenB, used, clear, size)  
-		output ('Disk', fs) 
+		output ('Disco', fs) 
 	if usedpercent > 33 and usedpercent < 67:
 		fs = '%s%s %s/ %s' % (yellowB, used, clear, size)  
-		output ('Disk', fs) 
+		output ('Disco', fs) 
 	if usedpercent >= 67:
 		fs = '%s%s %s/ %s' % (redB, used, clear, size)  
-		output ('Disk', fs) 
+		output ('Disco', fs) 
 	  
  
 # Run functions found in 'display' array.
