@@ -38,8 +38,18 @@ if [ $resposta == "alsa" ]; then
 			break
 		fi
 	done
-	# Desativa encaminhamento virtual de mixers
-	echo > /etc/asound
+	# Ativa encaminhamento de audio para alsa
+	echo $'pcm.cs4281 {
+		type hw
+		card 0
+}
+
+ctl.cs4281 {
+		type hw
+		card 0
+}
+' > /etc/asound
+
 fi
 
 if [ $resposta == "oss" ]; then
@@ -58,25 +68,25 @@ if [ $resposta == "oss" ]; then
 	/etc/init.d/oss4-base start
 	/etc/init.d/oss4-base force-reload
 	
-	# Ativa encaminhamento virtual de mixers
+	# Ativa encaminhamento de audio para OSS
 	echo $'pcm.oss {
-        type oss
-        device /dev/dsp
+		type oss
+		device /dev/dsp
 }
 
 pcm.!default {
-        type oss
-        device /dev/dsp
+		type oss
+		device /dev/dsp
 }
 
 ctl.oss {
-        type oss
-        device /dev/mixer
+		type oss
+		device /dev/mixer
 }
 
 ctl.!default {
-        type oss
-        device /dev/mixer
+		type oss
+		device /dev/mixer
 }
 ' > /etc/asound
 	
