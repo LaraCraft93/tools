@@ -1,0 +1,51 @@
+#!/bin/bash
+# v3.6 - 14/12/11 - Lara Maia
+# $1 = quantidade de músicas
+# $2 = quantidade de tiers
+
+t=1; while [ $t != $2 ]; do
+	rm -rf Guitar\ Hero\ 2/$[$t-1]*         # Deleta Tier anterior
+	rar x -y *tier${t}.rar                  # Descompacta atual
+	m=1; while [ $m != $1 ]; do
+		cd Guitar\ Hero\ 2/             # Entra na pasta do Tier
+		mkdir Guitar\ Hero\ 2/          # Cria nova pasta para compactação
+		mv ${t}.${m}*/ Guitar\ Hero\ 2/ # move música para a pasta
+        mv label.png Guitar\ Hero\ 2/   # Move arquivos para a pasta de compactação
+		mv titles.ini Guitar\ Hero\ 2/  	# //
+		mv ../changelog.txt .           	# //
+		mv ../Como\ Usar.txt .          	# //           
+        arqv=$(ls Guitar\ Hero\ 2/${t}.${m}*/ -d)  # <-- Nome da música para compactar
+        arqv=${arqv#*/}                             # //
+        arqv=${arqv:4:-1}                           # //
+                                # (abaixo) compacta arquivos
+		rar a -m5 -ep1 -o- "$arqv" Guitar\ Hero\ 2 changelog.txt Como\ Usar.txt 
+		mv Guitar\ Hero\ 2/label.png .  # Move arquivo de volta a pasta original
+		mv Guitar\ Hero\ 2/titles.ini . # //
+		mv changelog.txt ../            # //
+		mv Como\ Usar.txt ../           # //
+		rm -rf Guitar\ Hero\ 2/         # Deleta pasta de compactação
+		cd ..
+	m=$[$m+1]; done
+	################################ Encore ################################
+	cd Guitar\ Hero\ 2/             # Entra na pasta do Tier
+	mkdir Guitar\ Hero\ 2/          # Cria nova pasta para compactação
+	mv ${t}.E*/ Guitar\ Hero\ 2/    # move música para a pasta
+	mv label.png Guitar\ Hero\ 2/   # Move arquivos para a pasta de compactação
+	mv titles.ini Guitar\ Hero\ 2/  	# //
+	mv ../changelog.txt .           	# //
+	mv ../Como\ Usar.txt .          	# // 
+    arqv=$(ls Guitar\ Hero\ 2/${t}.E*/ -d)  # <-- Nome da música para compactar 
+    arv=${arqv#*/}                          # //
+    arqv=${arqv:4:-1}                       # //
+                                # (abaixo) compacta arquivos
+    rar a -m5 -ep1 -o- "$arqv" Guitar\ Hero\ 2 changelog.txt Como\ Usar.txt 
+	mv Guitar\ Hero\ 2/label.png .  # Move arquivo de volta a pasta original
+	mv Guitar\ Hero\ 2/titles.ini . # //
+	mv changelog.txt ../            # //
+	mv Como\ Usar.txt ../           # //
+	rm -rf Guitar\ Hero\ 2/         # Deleta pasta de compactação
+	cd ..
+	########################################################################
+t=$[$t+1]; done
+
+zenity --info --text="Compactação completada"
