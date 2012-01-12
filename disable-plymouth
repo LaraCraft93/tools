@@ -1,0 +1,10 @@
+#!/bin/bash
+sudo mv --verbose /etc/init.d/plymouth /etc/init.d/plymouth.bkp
+sudo mv --verbose /etc/init.d/plymouth-log /etc/init.d/plymouth-log.bkp
+sudo mv --verbose /etc/init.d/plymouth-splash /etc/init.d/plymouth-splash.bkp
+sudo mv --verbose /etc/init.d/plymouth-stop /etc/init.d/plymouth-stop.bkp
+
+sudo update-rc.d -f plymouth remove
+sudo update-rc.d -f plymouth-log remove
+sudo update-rc.d -f plymouth-splash remove
+sudo update-rc.d -f plymouth-stop remove
