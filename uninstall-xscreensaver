@@ -1,0 +1,4 @@
+#!/bin/bash
+apt-get purge xscreensaver*
+sed 's/USE_DPMS/#USE_DPMS/g' -i /etc/default/acpi-support
+sed 's/LOCK_SCREEN/#LOCK_SCREEN/g' -i /etc/default/acpi-support
