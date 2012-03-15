@@ -1,0 +1,15 @@
+#!/bin/bash
+# Autor: Lara Maia
+# Versão: 0.3
+
+md5=`echo $RANDOM | md5sum`
+trash="/home/mrk3004/.local/share/Trash/files"
+rmdir="${trash}/${md5:0:${#md5}-3}"
+
+mkdir "$rmdir"
+mv -v "$@" "${rmdir}/" 2>/dev/null
+
+if [ $? != 0 ]; then echo 'Abortar!'; exit 1; fi
+
+exit 0
+
