@@ -1,15 +1,89 @@
-#!/bin/bash
-# Autor: Lara Maia
-# Versão: 0.3
+#!/bin/sh
+# Autor: Lara Maia <lara@craft.net.br>
+# Versão: 1.0
 
-md5=`echo $RANDOM | md5sum`
-trash="/home/mrk3004/.local/share/Trash/files"
-rmdir="${trash}/${md5:0:${#md5}-3}"
+trash="/home/mrk3004/.local/share/Trash/"
+filemanager="pcmanfm-mod"
 
-mkdir "$rmdir"
-mv -v "$@" "${rmdir}/" 2>/dev/null
+function del() {
+  if [ "$1" == "" ]; then 
+    echo "Não posso deletar o nada ¬¬. Informe um arquivo!"
+    exit 1
+  fi
+  
+  md5=`echo $RANDOM | md5sum`
+  rmdir="${trash}/files/${md5:0:${#md5}-3}"
+  mkdir "$rmdir"
+  
+  declare -a arquivos=($@)
+  for ((a=0;a < ${#arquivos[@]};a++)); do
+    if [ ! -e "`pwd`/${arquivos[$a]}" ]; then
+      echo "Este arquivo não existe."
+      exit 1
+    fi
+    echo "Movendo `pwd`/${arquivos[$a]} para a Lixeira"
+    mv -v "`pwd`/${arquivos[$a]}" "$rmdir/" 1>/dev/null
+    deln=0
+    for delinfo in `ls -1 ${trash}/info/${arquivos[$a]} 2>/dev/null` ]; do
+      ((deln+=1))
+    done
+    if [ $deln == 1 ]; then
+      delinfo="${trash}/info/${arquivos[$a]}"
+    else
+      delinfo="${trash}/info/${arquivos[$a]}($deln)"
+    fi
+    echo "LOG de ${arquivos[$a]} - `date --rfc-2822`" >> $delinfo
+    echo "-----------------------------------------------" >> $delinfo
+    echo -e "\nArquivo: ${arquivos[$a]}" >> $delinfo
+    echo "Local original: `pwd`/${arquivos[$a]}" >> $delinfo
+    echo "Local na lixeira: $rmdir/${arquivos[$a]}" >> $delinfo
+  done
+}
 
-if [ $? != 0 ]; then echo 'Abortar!'; exit 1; fi
+function deltrash() {
+  if [ `id -u` != 0 ]; then
+    echo "Somente o ROOT pode esvaziar a lixeira."
+    exit 1
+  fi
+  echo "Analizando, por favor aguarde..."
+  total="`du -hs $trash | awk '{print $1}'`"
+  if [ "${total:2}" == "K" ] && [ ${total:0:-1} -le 20 ]; then
+    echo "A Lixeira está vazia."
+    exit 0
+  fi
+  echo -n "${total}B de espaço em disco será liberado. Continuar? [s/N]: "
+  read resp
+  if [ $resp == "S" ] && [ $resp == "s" ]; then
+    echo "Removendo arquivos..."
+    rm -rfv ${trash}/files/* 1>/dev/null
+    echo "Removendo arquivos ocultos..."
+    rm -rfv ${trash}/files/.* >/dev/null 2>&1
+    echo "Removendo logs da lixeira..."
+    rm -rfv ${trash}/info/* 1>/dev/null
+  else
+    echo "Cancelado!"
+    exit 0
+  fi
+  echo "Operação completada com sucesso!"
+}
+
+function search() {
+  0=0
+}
+
+case $1 in
+      --search) 
+            search $@ 
+            ;;
+      --rmtrash) 
+            deltrash 
+            ;;
+      --openinfo) 
+            $filemanager $trash/info &
+            ;;
+      *) 
+        del $@ 
+        ;;
+esac
 
 exit 0
-
