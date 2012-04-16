@@ -17,26 +17,55 @@ function del() {
   
   declare -a arquivos=($@)
   for ((a=0;a < ${#arquivos[@]};a++)); do
-    if [ ! -e "`pwd`/${arquivos[$a]}" ]; then
+    if [ ! -e "${arquivos[$a]}" ]; then
       echo "Este arquivo não existe."
       exit 1
     fi
-    echo "Movendo `pwd`/${arquivos[$a]} para a Lixeira"
-    mv -v "`pwd`/${arquivos[$a]}" "$rmdir/" 1>/dev/null
+    
+    if [ ${arquivos[$a]:0:1} == "/" ]; then
+      echo "Movendo ${arquivos[$a]} para a Lixeira"
+      absolute="True"
+    else
+      echo "Movendo `pwd`/${arquivos[$a]} para a Lixeira"
+      absolute="False"
+    fi
+    
+    mv -v "${arquivos[$a]}" "$rmdir/" 1>/dev/null
     deln=0
-    for delinfo in `ls -1 ${trash}/info/${arquivos[$a]} 2>/dev/null` ]; do
+    if [ $absolute == "True" ]; then
+      trashinfo_arqvs=$(ls -1 ${trash}/info/`basename ${arquivos[$a]}` 2>/dev/null)
+    else
+      trashinfo_arqvs=$(ls -1 ${trash}/info/${arquivos[$a]} 2>/dev/null)
+    fi
+    for delinfo in "${trashinfo_arqvs}" ]; do
       ((deln+=1))
     done
     if [ $deln == 1 ]; then
-      delinfo="${trash}/info/${arquivos[$a]}"
+      if [ $absolute == "True" ]; then
+        delinfo="${trash}/info/`basename ${arquivos[$a]}`"
+      else
+        delinfo="${trash}/info/${arquivos[$a]}"
+      fi
     else
-      delinfo="${trash}/info/${arquivos[$a]}($deln)"
+      if [ $absolute == "True" ]; then
+        delinfo="${trash}/info/`basename ${arquivos[$a]}`($deln)"
+      else
+       delinfo="${trash}/info/${arquivos[$a]}($deln)"
+      fi
     fi
-    echo "LOG de ${arquivos[$a]} - `date --rfc-2822`" >> $delinfo
-    echo "-----------------------------------------------" >> $delinfo
-    echo -e "\nArquivo: ${arquivos[$a]}" >> $delinfo
-    echo "Local original: `pwd`/${arquivos[$a]}" >> $delinfo
-    echo "Local na lixeira: $rmdir/${arquivos[$a]}" >> $delinfo
+    if [ $absolute == "True" ]; then
+      echo "LOG de `basename ${arquivos[$a]}` - `date --rfc-2822`" >> $delinfo
+      echo "-----------------------------------------------" >> $delinfo
+      echo -e "\nArquivo: `basename ${arquivos[$a]}`" >> $delinfo
+      echo "Local original: ${arquivos[$a]}" >> $delinfo
+      echo "Local na lixeira: $rmdir/`basename ${arquivos[$a]}`" >> $delinfo
+    else
+      echo "LOG de ${arquivos[$a]} - `date --rfc-2822`" >> $delinfo
+      echo "-----------------------------------------------" >> $delinfo
+      echo -e "\nArquivo: ${arquivos[$a]}" >> $delinfo
+      echo "Local original: `pwd`/${arquivos[$a]}" >> $delinfo
+      echo "Local na lixeira: $rmdir/${arquivos[$a]}" >> $delinfo
+    fi
   done
 }
 
