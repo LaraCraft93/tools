@@ -1,5 +1,0 @@
-#!/bin/bash
-# v2 - 05/12/11 - Lara Maia
-rar a -m5 -ep1 -o- fretsonfire-guitar-hero-2-pack \
-Guitar\ Hero\ 2 changelog.txt Como\ Usar.txt
-zenity --info --text="Compactação completada"
