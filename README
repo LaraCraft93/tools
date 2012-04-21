@@ -1,3 +1,21 @@
-Repositório apenas para fins de desenvolvimento, controle de versões de scripts semi-automaticos, e alguns outros projetos pessoais
+---------- BuildTools ----------
+Repositório apenas para fins de desenvolvimento, controle de versões de scripts
+semi-automaticos e alguns outros projetos pessoais sem garantia.
 
-Contato: lara@craft.net.br
+Todos os arquivos contidos aqui, fazem parte do projeto BuildTools.
+
+BuildTools é um software livre; você pode redistribui-lo e/ou 
+modifica-lo dentro dos termos de Licença Pública Geral GNU como
+publicada pela Fundação do Sofware Livre (FSF); na versão 3 da
+Licença, ou (na sua opnião) qualquer versão.
+
+Este projeto é distribuido na esperança que possa ser útil, mas
+SEM NENHUMA GARANTIA; sem garantia implicita de ADEQUAÇÃO a qualquer
+MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+para maiores detalhes. 
+
+Você deve ter recebido uma cópia da Licença Pública Geral GNU junto
+com este programa, se não, escreva para a Fundação do Software Livre
+(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+
+Lara Maia - Lara Maia <lara@craft.net.br>

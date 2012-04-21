@@ -1,0 +1,21 @@
+----------- MvTrash -----------
+MvTrash foi criado com o intuito de evitar a perca de arquivos ao executar
+o comando rm. O script em vez de excluir os arquivos imediatamente os move
+para a lixeira (especificada na variável "trash" no próprio script).
+
+----------- Uso -----------
+Para a prevenção, você pode mover o script para seu PATH e criar um alias
+no seu /etc/profile ou ~/.bashrc (e.g: alias rm=mvtrash), assim o comando rm é
+interceptado no terminal. Programas gráficos e scripts externos ainda 
+usarão o rm comum.
+
+----------- Considerações -----------
+ O script ainda não está 100%, por esta razão o rm não é substituído
+completamente, pois pode provocar erros em outros programas. Em breve
+será possível a interceptação completa por parte do script, fazendo o
+monitoramento de exclusão de todo o sistema.
+
+----------- Buildtools -----------
+*Este programa faz parte do projeto BuildTools e não tem qualquer garantia
+de funcionamento. Não me responsabilizo por uso inadequado ou problemas
+que podem vir a ocorrer, use por sua própria conta e risco.
