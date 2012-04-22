@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=208005
+# Atualização e adaptação por Lara Maia
+# Versão: 0.1
+
+import imp, sys, string, os.path
+
+magic = string.join(["\\x%.2x" % ord(c) for c in imp.get_magic()],"")
+name = os.path.basename(sys.executable)
+ 
+binfmt = '''\
+package %s
+interpreter /usr/bin/%s
+magic %s\
+''' % (name, name, magic)
+
+filename = '/usr/share/binfmts/' + name
+open(filename,'w+').write(binfmt)
+
+os.system('update-binfmts --import python')
+
+print('Operação completada com sucesso!')
+
+exit(0)
