@@ -10,9 +10,9 @@ function del() {
     echo "Não posso deletar o nada ¬¬. Informe um arquivo!"
     exit 1
   fi
-  
-  md5=`echo $RANDOM | md5sum`
-  rmdir="${trash}/files/${md5:0:${#md5}-3}"
+
+  _hash=$(cat /dev/urandom | tr -dc 'a-zA-Z' | head -c 10)
+  rmdir="${trash}/files/`date +%d%m%y-%H%M%S_$_hash`"
   mkdir "$rmdir"
   
   declare -a arquivos=($@)
