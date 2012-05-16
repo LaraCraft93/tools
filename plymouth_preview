@@ -1,0 +1,29 @@
+#!/bin/bash
+# Preview do tema do plymouth
+# Autor: Lara Maia
+# Versão: 0.1
+
+if [ `id -u` != 0 ]; then
+  echo "Este programa deve ser executado como ROOT!"
+  exit 1
+fi
+
+plymouthd
+plymouth-set-default-theme -l
+
+echo -e "\nDigite um tema da lista acima que deseja testar"
+read tema
+
+plymouth-set-default-theme ${tema}
+plymouth --show-splash &
+sleep 5
+plymouth --quit
+
+echo -e "\nUsar este tema? [s/N]: "
+read -n 1 resp
+
+case $resp in
+  s|S) mkinitcpio -p linux ;;
+esac
+
+exit 0
