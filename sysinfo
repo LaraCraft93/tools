@@ -1,0 +1,66 @@
+#!/bin/bash
+# Este script retorna informações úteis sobre
+# temperaturas e uso de cpu/gpu/memória
+# Autor: Lara Maia
+# Versão: 0.2
+
+case $1 in
+	--cputemp)
+		cputemp=$(cat /sys/bus/acpi/devices/LNXTHERM\:00/thermal_zone/temp | cut -c01-02)
+		echo -n "$cputemp C"
+	;;
+	--cpuused)
+		case $2 in
+			0)
+			cpu=$(mpstat -P ALL | sed "s/,/./g" | awk 'NR==5{print $3+$4+$5+$6+$7+$8+$9+$10}')
+			;;
+			1)
+			cpu=$(mpstat -P ALL | sed "s/,/./g" | awk 'NR==6{print $3+$4+$5+$6+$7+$8+$9+$10}')
+			;;
+			2)
+			cpu=$(mpstat -P ALL | sed "s/,/./g" | awk 'NR==7{print $3+$4+$5+$6+$7+$8+$9+$10}')
+			;;
+			3)
+			cpu=$(mpstat -P ALL | sed "s/,/./g" | awk 'NR==8{print $3+$4+$5+$6+$7+$8+$9+$10}')
+			;;
+		esac
+		echo -n "${cpu}%"
+		;;
+	--gputemp)
+		gputemp=$(nvidia-smi -a | grep Gpu | cut -c35-50 | grep C)
+		echo -n "$gputemp"
+	;;
+	--gpuused)
+		gpuused=$(nvidia-smi -a | grep Used | cut -c35-50)
+		gpuused2=$(nvidia-smi | grep % | awk '{print $9}')
+		echo -n "$gpuused $gpuused2"
+	;;
+	--bufferram)
+		bufferram=$(free -m | grep Mem: | awk '{print $6}')
+		echo -n "$bufferram"
+	;;
+	--cacheram)
+		cacheram=$(free -m | grep Mem: | awk '{print $7}')
+		echo -n "$cacheram"
+	;;
+	--swapram)
+		swapram=$(free -m | grep Swap: | awk '{print $3}')
+		echo -n "$swapram"
+	;;
+	--usedram)
+		usedram=$[`free -m | grep Mem: | awk '{print $3}'`-`free -m | grep \
+		Mem: | awk '{print $7}'`-`free -m | grep Mem: | awk '{print $6}'` ]
+		echo -n "$usedram"
+	;;
+	*|--help)
+		echo "Uso: ${0} --cputemp"
+		echo "     ${0} --cpuused <cpu number [0,1,2,3]>"
+		echo "     ${0} --gputemp"
+		echo "     ${0} --gpuused"
+		echo "     ${0} --bufferram"
+		echo "     ${0} --cacheram"
+		echo "     ${0} --swapram"
+		echo "     ${0} --usedram"
+		echo "     ${0} --help"
+	;;
+esac
