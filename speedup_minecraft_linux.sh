@@ -1,7 +1,7 @@
 #!/bin/bash
 # SpeedUp Minecraft Start for Linux - By Lara Maia
 # Lara Maia <lara@craft.net.br>
-# Versão: 0.1.3 | Copyright © 18/03/2012 - GPLV3
+# Versão: 0.1.4 | Copyright © 2012 - GPLV3
 
 clear; echo -ne "\033[01;33m"
 echo -ne "\033]0;SpeedUp Minecraft Start for Linux - By Lara Maia\007"
@@ -45,14 +45,13 @@ function main() {
 function exec() {
   trap "echo -e \"\033[m\"; unset jar arch config agressive process sse parallel ram user_; exit 0" INT TERM EXIT
   echo -e "\nInicializando, por favor aguarde..."; killall -9 java >/dev/null 2>&1
-  su ${user_##*/} -c 'java $arch -client $config $agressive $process $sse $parallel $ram -jar $jar >/dev/null 2>&1 &'
-  echo -e "\033[01;31m\n Ao Sair do jogo, pressione CTRL+C no terminal\n  para finalizar esse script corretamente."
-  while true; do
-    echo 3 > /proc/sys/vm/drop_caches
-    sysctl -w vm.drop_caches=3 >/dev/null 2>&1
-    sleep 600
-  done
+  echo 3 > /proc/sys/vm/drop_caches
+  sysctl -w vm.drop_caches=3 >/dev/null 2>&1
+  if [ "$arch" == "-d64" ]; then export LD_LIBRARY_PATH="${JAVA_HOME}/lib/amd64"; fi
+  su ${user_##*/} -c 'java $arch -client $config $agressive $process $sse $parallel $ram -jar $jar' # >/dev/null 2>&1'
+  if [ "$arch" == "-d64" ]; then unset LD_LIBRARY_PATH; fi
 }
+
 export -f exec; main
 killall -9 java >/dev/null 2>&1
 echo "Tudo Ok :)"
