@@ -1,0 +1,22 @@
+#!/bin/bash
+# Scripts de desligamento para o openbox+systemd
+# Autor: Lara Maia <lara@craft.net.br>
+
+function msg() {
+# $1 = text
+# $2 = command
+	yad --button=Não:1 --button=Sim:0 --image=dialog-question \
+	    --title="${1##*mesmo}" --window-icon=important \
+	    --text "${1}"
+	if [ $? == 0 ]; then
+		sudo systemctl ${2}
+	fi
+}
+
+case $1 in
+	desligar) msg "Você quer mesmo desligar o computador?" poweroff ;;
+	reiniciar) msg "Você quer mesmo reiniciar o computador?" reboot ;;
+	espera) msg "Você quer mesmo colocar o computador em espera?" suspend;;
+esac
+
+exit 0
