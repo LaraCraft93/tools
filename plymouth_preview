@@ -1,29 +1,34 @@
 #!/bin/bash
 # Preview do tema do plymouth
 # Autor: Lara Maia
-# Versão: 0.1
+# Versão: 0.2
 
 if [ `id -u` != 0 ]; then
   echo "Este programa deve ser executado como ROOT!"
   exit 1
 fi
 
-plymouthd
-plymouth-set-default-theme -l
+plymouthd --kernel-command-line="quiet splash"
+echo && plymouth-set-default-theme -l
 
-echo -e "\nDigite um tema da lista acima que deseja testar"
+echo -e "\nDigite um tema da lista acima que deseja testar:"
 read tema
 
 plymouth-set-default-theme ${tema}
-plymouth --show-splash &
-sleep 5
+plymouth show-splash
+sleep 8
 plymouth --quit
 
-echo -e "\nUsar este tema? [s/N]: "
-read -n 1 resp
+echo -en "\nUsar este tema? [s/N]: "
+read -n 1 resp && echo
 
 case $resp in
-  s|S) mkinitcpio -p linux ;;
+  s|S)	if [ "$1" == "" ]; then
+			mkinitcpio -p linux
+		else
+			mkinitcpio -p $1
+		fi
+		;;
 esac
 
 exit 0
