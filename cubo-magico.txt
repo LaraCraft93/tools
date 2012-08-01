@@ -1,0 +1,30 @@
+Fa C Ea Ca MEIO
+
+Da Ba D B BAIXO
+
+Ca Ea C E C F Ca Fa CIMA DIREITA
+
+C D Ca Da Ca Fa C F CIMA ESQUERDA
+
+
+FINAL
+
+PONTO F D C Da Ca Fa
+
+L (_|) IDEM
+
+LINHA (Horizontal) IDEM
+
+CRUZ ERRADA (ATRÁS - FRENTE)
+D C Da C D C C (Ca Ca) Da
+
+
+CRUZ ERRADA (ATRÁS - DIREITA)
+IDEM
+
+
+CRUZ CERTA (LADO CERTO)
+C D Ca Ea C Da Ca E
+
+2 incorreto Da Ba D B (RRRRR)
+(VIRA CIMA -> REPETE ULTIMA)
