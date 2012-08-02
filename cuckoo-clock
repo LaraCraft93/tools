@@ -1,14 +1,41 @@
 #!/bin/bash
-# Cuckoo-clock script 0.1
+# Cuckoo-clock script 0.2
 # Lara Maia © 2012
 
-if [ "$1" == "" ]; then
-	count=10
-else
-	count=$1
-fi
+count=10
+minutes=3
 
-trap "exit 0" INT TERM EXIT
+function help() {
+cat << EOF
+ Usage:
+ $0 <times that the cuckoo will sing> <minutes of snooze>
+ 
+ Example:
+ $0 10 3
+ 
+ To disable cdrom eject pass the param '--no-eject'
+EOF
+}
+
+function exitchecks() {
+	killall eject
+	eject /dev/cdrom -t
+	echo "Have a nice day day!"
+	exit 0
+}
+
+if [ "$1" != "" ]; then count=$1; fi
+if [ "$2" != "" ]; then minutes=$2; fi
+
+while [ $# -gt 0 ]; do
+	case $1 in
+		-h|--help) help && exit 0 ;;
+		--no-eject) noeject=true ;;
+	esac
+	shift
+done
+
+trap exitchecks INT TERM EXIT
 
 cuckoo=$'524946464028000057415645666d74201000000001000100112b0000112b
 00000100080066616374040000001028000064617461102800009aa1aeb3
@@ -356,7 +383,17 @@ a2a4a0968a7d6e645b595f68747f888e8e8987807a76767a818a939ba0a1
 84807f7f7e7c7a79787877767677797c7e7f80818384'
 
 while [ $count -gt 0 ]; do
-	eject /dev/cdrom
+	if [ "$noeject" != true ]; then
+		eject /dev/cdrom -t &
+		eject /dev/cdrom &
+	fi
 	echo "$cuckoo" | xxd -r -p | aplay >/dev/null
 	echo "Cuckoo!!"
-done
+((count-=1)); done
+
+killall eject
+eject /dev/cdrom -t
+sleep $[ $minutes * 60 ]
+$0
+
+exit 1
