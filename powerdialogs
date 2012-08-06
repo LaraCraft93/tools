@@ -9,14 +9,19 @@ function msg() {
 	    --title="${1##*mesmo}" --window-icon=important \
 	    --text "${1}"
 	if [ $? == 0 ]; then
-		sudo systemctl ${2}
+		if [ "$2" == "logout" ]; then
+			openbox --exit
+		else
+			sudo systemctl ${2}
+		fi
 	fi
 }
 
 case $1 in
 	desligar) msg "Você quer mesmo desligar o computador?" poweroff ;;
 	reiniciar) msg "Você quer mesmo reiniciar o computador?" reboot ;;
-	espera) msg "Você quer mesmo colocar o computador em espera?" suspend;;
+	espera) msg "Você quer mesmo colocar o computador em espera?" suspend ;;
+	logout) msg "Você quer mesmo encerrar sua sessão?" logout ;;
 esac
 
 exit 0
