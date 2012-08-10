@@ -1,8 +1,8 @@
 #!/bin/bash
-# Cuckoo-clock script 0.2
+# Cuckoo-clock script 0.3
 # Lara Maia © 2012
 
-count=10
+count=20
 minutes=3
 
 function help() {
@@ -18,16 +18,17 @@ EOF
 }
 
 function exitchecks() {
-	killall eject
+	killall eject >/dev/null 2>&1
 	eject /dev/cdrom -t
 	echo "Have a nice day day!"
 	exit 0
 }
 
-if [ "$1" != "" ]; then count=$1; fi
-if [ "$2" != "" ]; then minutes=$2; fi
+if [ "$1" != "" -a "$1" != "--no-eject" ]; then count=$1; fi
+if [ "$2" != "" -a "$2" != "--no-eject" ]; then minutes=$2; fi
 
 while [ $# -gt 0 ]; do
+	params+=($1)
 	case $1 in
 		-h|--help) help && exit 0 ;;
 		--no-eject) noeject=true ;;
@@ -387,13 +388,17 @@ while [ $count -gt 0 ]; do
 		eject /dev/cdrom -t &
 		eject /dev/cdrom &
 	fi
-	echo "$cuckoo" | xxd -r -p | aplay >/dev/null
+	(echo "$cuckoo" | xxd -r -p | aplay) >/dev/null 2>&1
 	echo "Cuckoo!!"
 ((count-=1)); done
 
-killall eject
+killall eject >/dev/null 2>&1
 eject /dev/cdrom -t
-sleep $[ $minutes * 60 ]
-$0
+
+while [ $minutes -gt 0 ]; do
+	echo 'zzzZZZzZZzZzzzzz'
+	sleep 60
+((minutes-=1)); done
+$0 ${params[@]}
 
 exit 1
