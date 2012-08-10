@@ -1,38 +1,38 @@
 #!/bin/sh
 # Speedup kde login
 # Author: Lara Maia
-# Version: 0.1
+# Version: 0.2
 
 ENABLE_KSPLASHX=true
 
 export KDEHOME=$HOME/.kde4
+export KDELIBEXEC=/usr/lib/kde4/libexec
 export QT_PLUGIN_PATH=/usr/lib/kde4/plugins/
 
 #[ -r $kdehome/share/config/startupconfig ] && . $kdehome/share/config/startupconfig
 
-for file in "${KDEHOME}/env/"; do
+for file in "${KDEHOME}/env/"*.sh; do
     test -r "$file" && . "$file"
 done
 
-(LD_BIND_NOW=true /usr/lib/kde4/libexec/start_kdeinit_wrapper +kcminit_startup) &
+${KDELIBEXEC}/lnusertemp tmp
+${KDELIBEXEC}/lnusertemp cache
+${KDELIBEXEC}/lnusertemp socket
+
+export KDE_FULL_SESSION=true
+xprop -root -f KDE_FULL_SESSION 8t -set KDE_FULL_SESSION true
+
+export KDE_SESSION_VERSION=4
+xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 4
+
+export KDE_SESSION_UID=`id -ru`
+
+LD_BIND_NOW=true ${KDELIBEXEC}/start_kdeinit_wrapper +kcminit_startup
 
 if [ "$ENABLE_KSPLASHX" == "true" ]; then
     . $KDEHOME/share/config/ksplashrc
     ksplashx_pid=`ksplashx "${Theme}" --pid`
 fi
 
-plasma-desktop
-#plasma-netbook
-/usr/lib/kde4/libexec/polkit-kde-authentication-agent-1
-
-kill $ksplashx_pid
-
-(sleep 3
-klipper
-kmix
-kmixctrl --restore
-krunner) &
-
-kwin
-
+kwrapper4 ksmserver --restore
 kdeinit4_shutdown
