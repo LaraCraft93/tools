@@ -21,6 +21,7 @@ case $1 in
 	desligar) msg "Você quer mesmo desligar o computador?" poweroff ;;
 	reiniciar) msg "Você quer mesmo reiniciar o computador?" reboot ;;
 	espera) msg "Você quer mesmo colocar o computador em espera?" suspend ;;
+	hibernar) msg "Você quer mesmo hibernar o computador?" hibernate ;;
 	logout) msg "Você quer mesmo encerrar sua sessão?" logout ;;
 esac
 
