@@ -5,9 +5,14 @@
 function msg() {
 # $1 = text
 # $2 = command
-	yad --button=Não:1 --button=Sim:0 --image=dialog-question \
-	    --title="${1##*mesmo}" --window-icon=important \
-	    --text "${1}"
+	if [ "${DESKTOP_SESSION%%-*}" == "kde" ]; then
+		kdialog -warningyesno "$1" --title="${1##*mesmo}"
+	else
+		yad --button=Não:1 --button=Sim:0 --image=dialog-question \
+		    --title="${1##*mesmo}" --window-icon=important \
+		    --text "${1}"
+	fi
+	
 	if [ $? == 0 ]; then
 		if [ "$2" == "logout" ]; then
 			openbox --exit
