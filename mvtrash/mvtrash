@@ -93,6 +93,21 @@ function search() {
   0=0
 }
 
+function usage() {
+cat <<EOF
+
+Uso: $0 Operação <parâmetros> [arquivo]
+
+`printf "%$[${#0}+3]cOperações  Parâmetros"`
+ $0            <arquivo>   Deleta arquivo
+ $0 --search   <arquivo>   Procura arquivo
+ $0 --rmtrash              Esvazia lixeira
+ $0 --openinfo             Abre pasta de log
+ $0 --help                 Mostra essa ajuda
+ 
+EOF
+}
+
 case $1 in
       --search) 
             search $@ 
@@ -102,6 +117,9 @@ case $1 in
             ;;
       --openinfo) 
             $filemanager $trash/info &
+            ;;
+      --help)
+            usage
             ;;
       *) 
         del $@ 
