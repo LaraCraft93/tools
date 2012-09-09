@@ -1,9 +1,9 @@
 #!/bin/sh
 # Autor: Lara Maia <lara@craft.net.br>
-# Versão: 1.0
+# Versão: 1.1
 
-trash="/home/mrk3004/.local/share/Trash"
-filemanager="pcmanfm-mod"
+trash="${HOME}/.local/share/Trash"
+filemanager="xdg-open"
 
 function del() {
   if [ "$1" == "" ]; then 
@@ -66,6 +66,7 @@ function deltrash() {
     echo "Somente o ROOT pode esvaziar a lixeira."
     exit 1
   fi
+  if [ "$1" ]; then trash="/home/${1}/.local/share/Trash"; fi
   echo "Analizando, por favor aguarde..."
   total="`du -hs $trash | awk '{print $1}'`"
   if [ "${total:2}" == "K" ] && [ ${total:0:-1} -le 20 ]; then
@@ -97,7 +98,7 @@ case $1 in
             search $@ 
             ;;
       --rmtrash) 
-            deltrash 
+            deltrash $@
             ;;
       --openinfo) 
             $filemanager $trash/info &
