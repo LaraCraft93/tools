@@ -15,7 +15,8 @@ function msg() {
 	
 	if [ $? == 0 ]; then
 		if [ "$2" == "logout" ]; then
-			openbox --exit
+			gksu -m "Você precisa de acesso de administrador\
+			para fazer isso. Digite sua senha abaixo:" killall xinit
 		else
 			sudo systemctl ${2}
 		fi
