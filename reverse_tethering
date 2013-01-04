@@ -1,0 +1,47 @@
+#!/bin/bash
+# Lara Maia - v0.3
+# Nota: Ativar Vínculo e Ponto de Acesso.
+
+if [ `id -u` != 0 ]; then 
+	echo 'Você precisa ser root'
+	exit 1
+fi
+
+pc() {
+	echo 'Carregando módulo'
+	modprobe usbnet
+	sleep 3
+	
+	echo 'Preparando interface'
+	ip addr flush usb0
+	sleep 1
+	
+	echo 'Ligando interface'
+	ip link set usb0 up
+	
+	echo 'Subindo rede'
+	ip addr add 192.168.1.1/24 dev usb0
+}
+
+android() {
+	echo 'Preparando interface'
+	ip addr flush usb0
+	echo 'Ligando interface'
+	ip link set usb0 up
+	echo 'Subindo rede'
+	ip addr add 192.168.1.2/24 dev usb0
+	echo 'Configurando getaway'
+	route add default gw 192.168.1.1
+	echo 'Configurando dns'
+	setprop net.dns1 208.67.222.222
+	setprop net.dns2 208.67.220.220
+}
+
+case "$1" in
+	'--pc') pc ;;
+	'--android') android ;;
+	*) exit 1 ;;
+esac
+
+echo "Completo!"
+	
