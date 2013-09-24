@@ -1,0 +1,10 @@
+#!/bin/bash
+# Lara Maia <lara@craft.net.br> © 2013 :c)
+# Need icoutils
+
+test "$1" == "" && exit 1
+
+dir="$(basename -zs'.ico' "$1")-extracted"
+echo "Criando $dir"
+mkdir $dir && icotool -x "$1" -o "$dir"/
+
