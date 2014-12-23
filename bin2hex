@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 # Converte arquivos binários em hexadecimal
 # e arquivos hexadecimais em binário
-# Autor: Lara Maia
+# Lara Maia <lara@craft.net.br> © 2013 :c)
 # Versão: 0.1
 
 import binascii

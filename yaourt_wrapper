@@ -1,16 +1,18 @@
 #!/bin/bash
+# Lara Maia <lara@craft.net.br>
+# Version: 1.0
 
 function full_upgrade() {
 		test $1 || sudo pacman -Sy
-		sudo pacman --needed -S $(pacman -Qq | grep -e '^linux[a-z-]\+headers$')
+		sudo pacman --needed -S $(pacman -Qqs linux headers)
 		yaourt -Su --aur
 }
 
 test "$1" == '--needed' && shift
 
 case "$1" in
-	-R|-Rc|-Rn|-Rs|-Rcn|-Rnc|-Rcns) sudo pacman $@ ;;
-	-Syu|-Suy) full_upgrade ;;
-	-Su) full_upgrade no_update ;;
-	*) yaourt --needed $@ ;;
+	-R|-Rc|-Rn|-Rs|-Rcn|-Rnc|-Rcns) sudo pacman $@         ;;
+	-Syu|-Suy)                      full_upgrade           ;;
+	-Su)                            full_upgrade no_update ;;
+	*)                              yaourt $@              ;;
 esac

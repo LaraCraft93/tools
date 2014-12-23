@@ -1,5 +1,5 @@
 #!/bin/bash
-# Lara Maia - =D | v1
+# Lara Maia <lara@craft.net.br>
 # Code Coffe
 # Based on fliptable from:
 # http://www.revfad.com/flip.html

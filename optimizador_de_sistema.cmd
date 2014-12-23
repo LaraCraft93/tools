@@ -1,4 +1,4 @@
-::Script criado por Lara Maia
+::Script criado por Lara Maia <lara@craft.net.br>
 ::Versão: 2.0 | Revisão: 19.0.0
 ::Apoio: fretsonfirebrasil.forumclan.com
 ::Esse software é um software de código livre

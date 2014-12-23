@@ -1,6 +1,6 @@
 #!/bin/bash
 # Preview do tema do plymouth
-# Autor: Lara Maia
+# Lara Maia <lara@craft.net.br>
 # Versão: 0.2
 
 if [ `id -u` != 0 ]; then

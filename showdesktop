@@ -1,4 +1,5 @@
 #!/bin/bash
+# Lara Maia <lara@craft.net.br>
 
 windows=(`wmctrl -l | awk '{print $1}'`)
 
@@ -10,7 +11,7 @@ case $1 in
 	1) for window in ${windows[@]}; do
            wmctrl -i -r $window -b add,hidden
        done
-       wmctrl -a tilda
+       wmctrl -a tilda # fix tilda
        ;;
 esac
 

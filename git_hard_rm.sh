@@ -1,4 +1,5 @@
 #!/bin/sh
+# Lara Maia <lara@craft.net.br>
 # $1 = Arquivo ou pasta
 # $2 = {,Pack}
 
