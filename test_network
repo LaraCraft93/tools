@@ -15,9 +15,10 @@ function speed() {
     max=$3
     
     first=`cat $network` && sleep $sleep && end=`cat $network`
-    BPS=$(( (end-first)/sleep ))
+    BPS=$(( (((end-first)/sleep)*100)/max ))
+    test $BPS -gt 100 && BPS=100
     
-    echo $(( (BPS*100)/max ))
+    echo $BPS
 }
 
 case $1 in
