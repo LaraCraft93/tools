@@ -13,7 +13,6 @@ LD_PRELOAD=$LD_PRELOAD:$STEAM/$RCE_PATH/$EAC $STEAM/$RCE_PATH/$RCE &
 for i in $(seq 0 10); do
     sleep 1
     if [ "$(pidof $RCE)" != "$(pidof $RCE -s)" ] \
-    && [ "$(pidof $RCE -s)" != ""] \
     && [ "$(ps -p `pidof $RCE -s` -o comm=)" != "$0" ]; then
         echo "killing \"$(pidof $RCE -s)\""
         kill $(pidof $RCE -s)
