@@ -9,7 +9,7 @@ LABEL="Arch Linux Ck"
 KERNEL=/vmlinuz-linux-ck
 INITRD=/initramfs-linux-ck.img
 SYSTEMROOT=/dev/sda2
-EXTRAOPTS="rw modeset=0 resume=/dev/sda2 resume_offset=15296512"
+EXTRAOPTS="rw modeset=0 resume=/dev/sda2 resume_offset=15296512 threadirqs"
 
 #################################
 
