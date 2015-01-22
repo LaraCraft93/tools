@@ -1,0 +1,24 @@
+#!/bin/bash
+# Lara Maia <lara@craft.net.br>
+
+CONF=/etc/pacman.conf
+
+function refresh() {
+    local temp=$(mktemp)
+    (cat $CONF | grep -v Xfer | sudo tee $temp >/dev/null) || exit 1
+    sudo pacman -S --config $temp -y || exit 1
+}
+
+case "${1#*-}" in
+    Sy)
+        refresh
+        ;;
+    Syu|Suy)
+        refresh && yaourt -Su
+        ;;
+    *)
+        yaourt $@
+        ;;
+esac        
+
+exit $?
