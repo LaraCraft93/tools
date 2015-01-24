@@ -10,7 +10,7 @@ ulimit -n 4096
 
 LD_PRELOAD=$LD_PRELOAD:$STEAM/$RCE_PATH/$EAC $STEAM/$RCE_PATH/$RCE &
 
-for i in $(seq 0 10); do
+for i in $(seq 0 30); do
     sleep 1
     if [ "$(pidof $RCE)" != "$(pidof $RCE -s)" ] \
     && [ "$(ps -p `pidof $RCE -s` -o comm=)" != "$0" ]; then
