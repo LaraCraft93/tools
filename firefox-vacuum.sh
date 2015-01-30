@@ -40,6 +40,7 @@ then
         sqlite3 "$db" "REINDEX;"
         let count++
     done
+    echo
 else
     echo "Firefox profile not found for user $USER"
     exit 1
