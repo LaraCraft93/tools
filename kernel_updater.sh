@@ -10,7 +10,9 @@ then
 fi
 
 function checkmv() {
-    test -f "$1" && mv "$1" "$2"
+    if test -f "$1"; then
+        mv "$1" "$2"
+    fi
 }
 
 pushd /usr/src/linux
