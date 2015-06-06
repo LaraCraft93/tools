@@ -15,6 +15,10 @@ function checkmv() {
     fi
 }
 
+#function make() {
+#    $(which make) HOSTCC=clang CC=clang $@
+#}
+
 pushd /usr/src/linux
 
 # limpar source antes da compilação
