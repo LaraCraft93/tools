@@ -8,7 +8,7 @@ EFIPART=1
 LABEL="Lara Gentoo"
 KERNEL=/kernel
 SYSTEMROOT=/dev/sda3
-EXTRAOPTS="rw video=uvesafb:1920x1080-32,mtrr:3,ywrap"
+EXTRAOPTS="rw"
 INIT="/usr/lib/systemd/systemd"
 
 #################################
