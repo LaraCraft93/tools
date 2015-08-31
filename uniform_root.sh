@@ -25,5 +25,5 @@ link .config/xfce4
 link .config/geany
 link .atom
 link .config/Atom
-
+link .config/fish/config.fish
 chattr +i /home/lara/.config/geany/geany.conf || exit 1
