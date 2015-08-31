@@ -7,7 +7,7 @@ EFIPART=1
 
 LABEL="Lara Gentoo"
 KERNEL=/kernel
-SYSTEMROOT=/dev/sda3
+SYSTEMROOT="/dev/sda5"
 EXTRAOPTS="rw"
 INIT="/usr/lib/systemd/systemd"
 
