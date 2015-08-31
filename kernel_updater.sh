@@ -27,13 +27,13 @@ make distclean
 # Atualizar configuração preferida
 cp /boot/kernel.config /usr/src/linux/.config
 make silentoldconfig
-checkmv /boot/kernel.config /boot/kernel.config.old
 
 # Abrir menu de configuração
 make menuconfig
 #make gconfig
 
 # Fazer backup da configuração
+checkmv /boot/kernel.config /boot/kernel.config.old
 cp .config /boot/kernel.config
 
 # Compilar o kernel
