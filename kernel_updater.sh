@@ -29,7 +29,7 @@ cp /boot/kernel.config /usr/src/linux/.config
 make silentoldconfig
 
 # Abrir menu de configuração
-make menuconfig
+if test "$1" != '-q' && make menuconfig
 #make gconfig
 
 # Fazer backup da configuração
