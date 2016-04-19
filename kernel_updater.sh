@@ -1,5 +1,5 @@
 #!/bin/bash
-# Lara Maia <lara@craft.net.br> 2015
+# Lara Maia <dev@lara.click>
 
 set -e
 
@@ -9,48 +9,97 @@ then
     exit 1
 fi
 
+
+# ============== Configuration ============== #
+
+# Verbose mode (1 = enable, 0 = disable)
+VERBOSE=1
+
+# Colorized output (1 = enable, 0 = disable)
+# You will need grc installed to use this
+COLOR=1
+
+# Open menuconfig before build (1 = enable, 0 = disable)
+MENUCONFIG=1
+
+# Check if external modules needs rebuild (1 = enable, 0 = disable)
+EXTMODULES=1
+
+# Update bootloader (1 = enable, 0 = disable)
+# Works only with the linux_stub_loader.sh script
+BOOTLOADER=1
+# =========================================== #
+
+
+# ================ functions ================ #
 function checkmv() {
     if test -f "$1"; then
-        mv "$1" "$2"
+        mv "$1" "$2" || exit 1
+    else
+        exit 1
     fi
 }
 
-#function make() {
-#    $(which make) HOSTCC=clang CC=clang $@
-#}
+function checkcp() {
+    if test -f "$1"; then
+        cp "$1" "$2" || exit 1
+    else
+        exit 1
+    fi
+}
 
-pushd /usr/src/linux
+function colormake() {
+    if test $COLOR -eq 1; then
+        grc -es /usr/bin/make $@
+    else
+        /usr/bin/make $@
+    fi
+}
+# =========================================== #
+
+pushd /usr/src/linux || exit 1
 
 # limpar source antes da compilação
-make distclean
+make distclean || exit 1
 
 # Atualizar configuração preferida
-cp /boot/kernel.config /usr/src/linux/.config
-make silentoldconfig
+if test -f /boot/kernel.config; then
+    checkcp /boot/kernel.config /usr/src/linux/.config
+fi
+make silentoldconfig || exit 1
 
 # Abrir menu de configuração
-test "$1" != '-q' && make menuconfig
-#make gconfig
+if test $MENUCONFIG -eq 1; then
+    make menuconfig || exit 1
+fi
 
 # Fazer backup da configuração
-checkmv /boot/kernel.config /boot/kernel.config.old
-cp .config /boot/kernel.config
+if test -f /boot/kernel.config; then
+    checkmv /boot/kernel.config /boot/kernel.config.old
+fi
+checkcp .config /boot/kernel.config
 
 # Compilar o kernel
-make -j5
+colormake V=$VERBOSE -j5 || exit 1
 
 # Instalar o kernel e módulos selecionados
-make modules_install
+colormake modules_install || exit 1
 checkmv /boot/kernel /boot/kernel.old
-cp arch/x86/boot/bzImage /boot/kernel
+checkcp arch/x86/boot/bzImage /boot/kernel
 checkmv /boot/System.map /boot/System.map.old
-cp System.map /boot/System.map
+checkcp System.map /boot/System.map
 
 # Preparar e recompilar módulos externos
-make modules_prepare
-emerge @module-rebuild
+if test $EXTMODULES -eq 1; then
+    colormake modules_prepare || exit 1
+    emerge @module-rebuild || exit 1
+fi
 
-popd
+popd || exit 1
 
 # Atualizar bootloader
-./linux_stub_loader.sh
+if test $BOOTLOADER -eq 1; then
+    $(dirname $0||echo '.')/linux_stub_loader.sh || exit 1
+fi
+
+exit 0
