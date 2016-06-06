@@ -8,7 +8,7 @@ EFIPART=1
 
 LABEL="Lara Gentoo"
 KERNEL=/kernel
-SYSTEMROOT="/dev/sda5"
+SYSTEMROOT="/dev/sda6"
 EXTRAOPTS="rw"
 
 #################################
