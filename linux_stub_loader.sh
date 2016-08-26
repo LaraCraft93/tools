@@ -8,7 +8,7 @@ EFIPART=1
 
 LABEL="Lara Gentoo"
 KERNEL=/kernel
-SYSTEMROOT="/dev/sda6"
+SYSTEMROOT="PARTUUID=F717E7D8-2E32-4123-AC66-463731E4AE54"
 EXTRAOPTS="rw"
 
 #################################
