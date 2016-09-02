@@ -36,6 +36,7 @@ function checkmv() {
     if test -f "$1"; then
         mv "$1" "$2" || exit 1
     else
+        echo "Error when mv ($1 > $2)"
         exit 1
     fi
 }
@@ -44,6 +45,7 @@ function checkcp() {
     if test -f "$1"; then
         cp "$1" "$2" || exit 1
     else
+        echo "Error when cp ($1 > $2)"
         exit 1
     fi
 }
