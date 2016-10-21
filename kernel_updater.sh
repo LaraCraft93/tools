@@ -28,6 +28,9 @@ EXTMODULES=1
 # Update bootloader (1 = enable, 0 = disable)
 # Works only with the linux_stub_loader.sh script
 BOOTLOADER=1
+
+# Numbers of threads (CPU CORES + 2)
+JOBS=6
 # =========================================== #
 
 
@@ -57,6 +60,17 @@ function colormake() {
         /usr/bin/make $@
     fi
 }
+
+function kernelmake() {
+	colormake V=$VERBOSE -j$JOBS
+
+	if test $? -ne 0; then
+		if test $VERBOSE -eq 1; then
+			make -j$JOBS | grep -n10 '***'
+		fi
+		return 1
+	fi
+}
 # =========================================== #
 
 pushd /usr/src/linux || exit 1
@@ -82,7 +96,7 @@ fi
 checkcp .config /boot/kernel.config
 
 # Compilar o kernel
-colormake V=$VERBOSE -j5 || exit 1
+kernelmake || exit 1
 
 # Instalar o kernel e módulos selecionados
 colormake modules_install || exit 1
