@@ -4,7 +4,7 @@
 import sys
 
 if len(sys.argv) < 3:
-    print("Usage: {} <in file> <out file>".format(sys.argv[0]))
+    print(f"Usage: {sys.argv[0]} <in file> <out file>")
     sys.exit(1)
 
 data = open(sys.argv[1]).readlines()
@@ -12,7 +12,7 @@ data = open(sys.argv[1]).readlines()
 rows = []
 for text in data:
     tdList = text.split('|')
-    tdList = ['<td>{}</td>'.format(td.strip()) for td in tdList]
+    tdList = [f'<td>{td.strip()}</td>' for td in tdList]
     rows.append(tdList)
 
 with open(sys.argv[2], 'w+') as fp:
@@ -20,7 +20,7 @@ with open(sys.argv[2], 'w+') as fp:
     for row in rows:
         fp.write('<tr>\n')
         for td in row:
-            fp.write('    {}\n'.format(td))
+            fp.write(f'    {td}\n')
         fp.write('</tr>\n')
     fp.write('</table>')
 
